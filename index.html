@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game - Pro Edition</title>
+    
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="./image/icon2.png">
+
+    <link rel="shortcut icon" href="./image/icon2.png" type="image/x-icon">
+    <link rel="stylesheet" href="./css/sweetalert2.min.css">
+    <link rel="stylesheet" href="./css/all.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+
+    <script>
+        // تسجيل الـ Service Worker لجعل التطبيق يعمل بدون إنترنت
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('PWA: Service Worker Registered!'))
+                    .catch(err => console.log('PWA: Service Worker Failed', err));
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="installApp" class="install-top-bar" style="display: none;">
+        <button id="installBtn" class="pwa-install-btn">
+            <i class="fas fa-mobile-alt"></i> تثبيت اللعبة كـ تطبيق
+        </button>
+    </div>
+    <div class="control-buttons">
+        <span>Start Game</span>
+    </div>
+
+    <div class="info-container">
+        <div class="name">Player: <span></span></div>
+        <div class="stars-live">⭐⭐⭐⭐⭐</div>
+        <div class="timer">Time: <span>05:00</span></div>
+        <div class="tries">Errors: <span>0</span></div>
+        <div id="hint-btn" title="Get a Hint (-30s)" style="cursor:pointer; font-size: 1.5rem;">Hint👁️:</div>
+    </div>
+
+    <div class="memory-game-blocks">
+        <div class="game-block" data-icon="ghost"><div class="face front"></div><div class="face back"><i class="fas fa-ghost"></i></div></div>
+        <div class="game-block" data-icon="ghost"><div class="face front"></div><div class="face back"><i class="fas fa-ghost"></i></div></div>
+        <div class="game-block" data-icon="rocket"><div class="face front"></div><div class="face back"><i class="fas fa-rocket"></i></div></div>
+        <div class="game-block" data-icon="rocket"><div class="face front"></div><div class="face back"><i class="fas fa-rocket"></i></div></div>
+        <div class="game-block" data-icon="bolt"><div class="face front"></div><div class="face back"><i class="fas fa-bolt"></i></div></div>
+        <div class="game-block" data-icon="bolt"><div class="face front"></div><div class="face back"><i class="fas fa-bolt"></i></div></div>
+        <div class="game-block" data-icon="gem"><div class="face front"></div><div class="face back"><i class="fas fa-gem"></i></div></div>
+        <div class="game-block" data-icon="gem"><div class="face front"></div><div class="face back"><i class="fas fa-gem"></i></div></div>
+        <div class="game-block" data-icon="plane"><div class="face front"></div><div class="face back"><i class="fas fa-plane"></i></div></div>
+        <div class="game-block" data-icon="plane"><div class="face front"></div><div class="face back"><i class="fas fa-plane"></i></div></div>
+        <div class="game-block" data-icon="heart"><div class="face front"></div><div class="face back"><i class="fas fa-heart"></i></div></div>
+        <div class="game-block" data-icon="heart"><div class="face front"></div><div class="face back"><i class="fas fa-heart"></i></div></div>
+        <div class="game-block" data-icon="gift"><div class="face front"></div><div class="face back"><i class="fas fa-gift"></i></div></div>
+        <div class="game-block" data-icon="gift"><div class="face front"></div><div class="face back"><i class="fas fa-gift"></i></div></div>
+        <div class="game-block" data-icon="tree"><div class="face front"></div><div class="face back"><i class="fas fa-tree"></i></div></div>
+        <div class="game-block" data-icon="tree"><div class="face front"></div><div class="face back"><i class="fas fa-tree"></i></div></div>
+        <div class="game-block" data-icon="sun"><div class="face front"></div><div class="face back"><i class="fas fa-sun"></i></div></div>
+        <div class="game-block" data-icon="sun"><div class="face front"></div><div class="face back"><i class="fas fa-sun"></i></div></div>
+        <div class="game-block" data-icon="coffee"><div class="face front"></div><div class="face back"><i class="fas fa-coffee"></i></div></div>
+        <div class="game-block" data-icon="coffee"><div class="face front"></div><div class="face back"><i class="fas fa-coffee"></i></div></div>
+        <div class="game-block" data-icon="music"><div class="face front"></div><div class="face back"><i class="fas fa-music"></i></div></div>
+        <div class="game-block" data-icon="music"><div class="face front"></div><div class="face back"><i class="fas fa-music"></i></div></div>
+        <div class="game-block" data-icon="car"><div class="face front"></div><div class="face back"><i class="fas fa-car"></i></div></div>
+        <div class="game-block" data-icon="car"><div class="face front"></div><div class="face back"><i class="fas fa-car"></i></div></div>
+        <div class="game-block" data-icon="key"><div class="face front"></div><div class="face back"><i class="fas fa-key"></i></div></div>
+        <div class="game-block" data-icon="key"><div class="face front"></div><div class="face back"><i class="fas fa-key"></i></div></div>
+        <div class="game-block" data-icon="camera"><div class="face front"></div><div class="face back"><i class="fas fa-camera"></i></div></div>
+        <div class="game-block" data-icon="camera"><div class="face front"></div><div class="face back"><i class="fas fa-camera"></i></div></div>
+        <div class="game-block" data-icon="bicycle"><div class="face front"></div><div class="face back"><i class="fas fa-bicycle"></i></div></div>
+        <div class="game-block" data-icon="bicycle"><div class="face front"></div><div class="face back"><i class="fas fa-bicycle"></i></div></div>
+        <div class="game-block" data-icon="umbrella"><div class="face front"></div><div class="face back"><i class="fas fa-umbrella"></i></div></div>
+        <div class="game-block" data-icon="umbrella"><div class="face front"></div><div class="face back"><i class="fas fa-umbrella"></i></div></div>
+    </div>
+
+    <div class="dark-mode-toggle" id="darkModeBtn">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="copyright">
+                Created with <i class="fas fa-heart pulse"></i> by 
+                <a href="https://basilsyam.github.io/Profile/" target="_blank">Basil Abd Al-Qader Naeem Syam</a>
+            </p>
+            <div class="social-links">
+                <a href="https://github.com/basilsyam" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/basel-seyam-1387b2379/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="https://wa.me/972599982722" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="mailto:basilsyam070@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <audio id="success" src="sound/success.mp3" preload="auto"></audio>
+    <audio id="click" src="sound/click.mp3" preload="auto"></audio>
+    <audio id="game-over-sound" src="sound/fail.mp3" preload="auto"></audio>
+
+    <script src="./js/sweetalert2.all.min.js"></script>
+    <script src="./js/script.js"></script>
+</body>
+</html>

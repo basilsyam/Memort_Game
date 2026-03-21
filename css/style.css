@@ -1,0 +1,356 @@
+/* --- 1. المتغيرات والأساسيات (Root Variables) --- */
+:root {
+    --bg-body: #f0f4f8;
+    --bg-info: #ffffff;
+    --primary-cool: #4dabf7;
+    --secondary-cool: #63e6be;
+    --text-main: #2c3e50;
+    --text-light: #747d8c;
+    --card-front-bg: #ffffff;
+    --card-back-bg: #e7f5ff;
+    --icon-color: #339af0;
+    --border-radius-lg: 20px;
+    --border-radius-sm: 10px; /* تم تصغيره ليناسب الكروت الصغيرة */
+    --transition-speed: 0.5s; /* أنيميشن أسرع قليلاً */
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* --- 2. إعدادات الوضع الليلي (Dark Mode) --- */
+body.dark-mode {
+    --bg-body: #0f111a;
+    --bg-info: #1a1b26;
+    --text-main: #e0e0e0;
+    --text-light: #949ec4;
+    --card-front-bg: #161925;
+    --card-back-bg: #1f2335;
+    --icon-color: #4dabf7;
+    --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* --- 3. تهيئة الصفحة (Global Reset) --- */
+* {
+    box-sizing: border-box;
+    margin: 0; padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 10px;
+    transition: 0.4s ease;
+}
+
+/* --- 4. شاشة البداية (Start Screen) --- */
+.control-buttons {
+    position: fixed; inset: 0;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex; justify-content: center; align-items: center;
+}
+
+.control-buttons span {
+    background: var(--primary-cool);
+    color: #fff;
+    font-size: 26px; font-weight: bold;
+    padding: 15px 40px;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(77, 171, 247, 0.4);
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* --- 5. حاوية المعلومات (Header Info) --- */
+.info-container {
+    width: 100%;
+    max-width: 850px;
+    background-color: var(--bg-info);
+    padding: 15px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 20px;
+}
+
+.name span { font-weight: bold; color: var(--primary-cool); }
+
+.stars-live {
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+}
+
+.timer {
+    display: flex; align-items: center; gap: 5px;
+    font-family: 'Courier New', monospace; font-weight: 800; font-size: 1.2rem;
+}
+
+/* --- 6. شبكة اللعبة الديناميكية (Dynamic Grid) --- */
+.memory-game-blocks {
+    display: grid;
+    gap: 8px; /* تقليل الفراغات لتناسب الحجم الصغير */
+    width: 95%;
+    max-width: 600px; /* هذا سيجعل المربعات أصغر بكثير (نصف الحجم تقريباً) */
+    perspective: 1000px;
+    margin: 0 auto;
+    bottom: 5px;
+    position: relative;
+}
+
+.memory-game-blocks.no-clicking { pointer-events: none; }
+
+/* --- 7. الكروت (Game Blocks) --- */
+.game-block {
+    aspect-ratio: 1/1;
+    position: relative;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.game-block.is-flipped, .game-block.has-match { transform: rotateY(180deg); }
+
+.face {
+    position: absolute;
+    width: 100%; height: 100%;
+    backface-visibility: hidden;
+    border-radius: var(--border-radius-sm);
+    display: flex; justify-content: center; align-items: center;
+}
+
+.front { background-color: var(--card-front-bg); border: 1px solid rgba(0,0,0,0.05); }
+.front::before {
+    content: '?';
+    font-size: 1.2rem; /* تم تصغيره من 2.2 */
+    color: var(--primary-cool);
+    opacity: 0.25;
+}
+
+.back {
+    background-color: var(--card-back-bg);
+    transform: rotateY(180deg);
+    border: 2px solid var(--secondary-cool);
+}
+
+.back i {
+    font-size: 1.4rem; /* تم تصغيره ليناسب الكرت الصغير */
+    color: var(--icon-color);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+/* في حال وجود نص (مثل BS للجوكر القديم)، نصغره أيضاً */
+.back span {
+    font-size: 12px !important;
+}
+
+/* --- 8. الأنيميشن (Animations) --- */
+.game-block.shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes shake {
+    10%, 90% { transform: rotateY(180deg) translate3d(-2px, 0, 0); }
+    20%, 80% { transform: rotateY(180deg) translate3d(4px, 0, 0); }
+    30%, 50%, 70% { transform: rotateY(180deg) translate3d(-6px, 0, 0); }
+    40%, 60% { transform: rotateY(180deg) translate3d(6px, 0, 0); }
+}
+
+/* --- 9. أزرار التحكم والفوتر --- */
+.dark-mode-toggle {
+    position: fixed; bottom: -2px; right: 20px;
+    width: 50px; height: 50px;
+    background: var(--primary-cool);
+    color: white; border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    z-index: 999;
+}
+
+#hint-btn { font-size: 1.5rem; cursor: pointer; }
+
+/* --- 10. التجاوب (Responsive Design) للموبايل --- */
+@media (max-width: 600px) {
+    .memory-game-blocks { 
+        max-width: 90%; 
+        gap: 5px; 
+    }
+    
+    .game-block { 
+        /* نلغي الـ min-height القديم لترك الـ grid يتحكم بالحجم */
+        min-height: auto; 
+    }
+
+    .back i { font-size: 1.1rem; }
+    .front::before { font-size: 1.1rem; }
+    
+    .info-container { flex-direction: column; padding: 15px; gap: 10px; text-align: center; }
+}
+
+/* تنسيق SweetAlert لتناسب هوية اللعبة */
+.swal2-popup { border-radius: 15px !important; padding: 1.5em !important; font-family: sans-serif; }
+.swal2-input, .swal2-select {
+    height: 40px !important;
+    font-size: 0.9rem !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--primary-cool) !important;
+    margin: 10px auto !important;
+    background: var(--bg-info) !important;
+    color: var(--text-main) !important;
+}
+.swal2-confirm { padding: 8px 25px !important; font-weight: bold !important; border-radius: 8px !important; }
+/* --- Premium Footer Style --- */
+.main-footer {
+    width: 95%;
+    max-width: 850px;
+    margin: 40px auto 20px;
+    padding: 25px;
+    background-color: var(--bg-info);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-soft);
+    border-top: 3px solid var(--primary-cool);
+    transition: background-color 0.4s ease;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.copyright {
+    color: var(--text-light);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.copyright a {
+    color: var(--primary-cool);
+    text-decoration: none;
+    font-weight: 700;
+    margin-right: 5px;
+    transition: 0.3s;
+}
+
+.copyright a:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+.pulse {
+    color: #ff6b6b;
+    animation: heartPulse 1.5s infinite;
+    margin: 0 5px;
+}
+
+.social-links {
+    display: flex;
+    gap: 20px;
+}
+
+.social-links a {
+    color: var(--text-light);
+    font-size: 1.4rem;
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.social-links a:hover {
+    color: var(--primary-cool);
+    transform: translateY(-5px);
+}
+
+/* Animation for the heart */
+@keyframes heartPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Dark Mode adjustment */
+body.dark-mode .main-footer {
+    border-top: 3px solid var(--primary-cool);
+    background-color: var(--bg-info);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .copyright {
+        font-size: 0.9rem;
+        text-align: center;
+    }
+}
+.install-top-bar {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000; /* لضمان ظهوره فوق كل العناصر */
+    width: 90%;
+    max-width: 400px;
+}
+
+.pwa-install-btn {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    animation: slideInDown 0.5s ease-out;
+}
+
+.pwa-install-btn:hover {
+    background: rgba(33, 150, 243, 0.7); /* لون أزرق شفاف عند الحوم */
+    border-color: #2196f3;
+}
+
+/* أنيميشن لظهور الزر من الأعلى */
+@keyframes slideInDown {
+    from {
+        transform: translateY(-100%) translateX(-50%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) translateX(-50%);
+        opacity: 1;
+    }
+} 
+.install-top-bar {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 90%;
+    max-width: 400px;
+    display: none; /* يتم إظهاره عبر JS */
+}
+
+.pwa-install-btn {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 12px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
