@@ -280,69 +280,50 @@ body.dark-mode .main-footer {
     }
 }
 /* --- 11. محسّن زر تثبيت الـ PWA --- */
-.install-top-bar {
-    position: fixed;
-    top: 20px; /* زيادة المساحة قليلاً من الأعلى */
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2000;
-    width: 90%;
-    max-width: 350px; /* جعل العرض أكثر رشاقة */
+./* تنسيق حاوية الزر داخل الناف */
+.install-nav-wrapper {
+    margin-left: 10px;
 }
 
-.pwa-install-btn {
-    width: 100%;
-    /* خلفية متفاعلة مع الوضع الليلي */
-    background: var(--bg-info); 
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 2px solid var(--primary-cool); /* إطار بلون اللعبة الأساسي */
-    color: var(--text-main);
-    padding: 12px 25px;
-    border-radius: 50px;
+.pwa-install-btn-nav {
+    background: var(--primary-cool);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: var(--border-radius-sm);
     cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 700;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    font-size: 0.85rem;
+    font-weight: bold;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 12px;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    animation: slideInDown 0.6s ease-out;
+    gap: 8px;
+    transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(77, 171, 247, 0.3);
 }
 
-.pwa-install-btn i {
-    color: var(--primary-cool);
-    font-size: 1.1rem;
+.pwa-install-btn-nav:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
 }
 
-.pwa-install-btn:hover {
-    transform: scale(1.05); /* تأثير تكبير بسيط عند الحوم */
-    background: var(--primary-cool);
-    color: #fff;
+.pwa-install-btn-nav i {
+    font-size: 0.9rem;
 }
 
-.pwa-install-btn:hover i {
-    color: #fff;
-}
-
-/* تعديل الأنيميشن ليكون أكثر نعومة */
-@keyframes slideInDown {
-    from {
-        top: -100px;
-        opacity: 0;
+/* لضمان بقاء الناف متناسقاً على الموبايل */
+@media (max-width: 600px) {
+    .info-container {
+        flex-wrap: wrap; /* للسماح للعناصر بالنزول لسطر جديد إذا ضاق المكان */
+        justify-content: center;
+        gap: 15px;
     }
-    to {
-        top: 20px;
-        opacity: 1;
+    
+    .install-nav-wrapper {
+        width: 100%; /* جعل الزر يأخذ عرضاً كاملاً في الموبايل تحت البيانات */
+        margin-left: 0;
     }
-}
-
-/* إخفاء الزر على الشاشات الصغيرة جداً إذا كان يغطي مساحة كبيرة */
-@media (max-width: 400px) {
-    .pwa-install-btn {
-        font-size: 0.85rem;
-        padding: 10px 15px;
+    
+    .pwa-install-btn-nav {
+        justify-content: center;
     }
 }
