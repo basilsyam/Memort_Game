@@ -279,50 +279,70 @@ body.dark-mode .main-footer {
         text-align: center;
     }
 }
+/* --- 11. محسّن زر تثبيت الـ PWA --- */
 .install-top-bar {
     position: fixed;
-    top: 15px;
+    top: 20px; /* زيادة المساحة قليلاً من الأعلى */
     left: 50%;
     transform: translateX(-50%);
-    z-index: 2000; /* لضمان ظهوره فوق كل العناصر */
+    z-index: 2000;
     width: 90%;
-    max-width: 400px;
+    max-width: 350px; /* جعل العرض أكثر رشاقة */
 }
 
 .pwa-install-btn {
     width: 100%;
-    background: #fff;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: var(--primary-cool);
-    padding: 10px 20px;
+    /* خلفية متفاعلة مع الوضع الليلي */
+    background: var(--bg-info); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid var(--primary-cool); /* إطار بلون اللعبة الأساسي */
+    color: var(--text-main);
+    padding: 12px 25px;
     border-radius: 50px;
     cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: bold;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    font-size: 0.95rem;
+    font-weight: 700;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
-    transition: all 0.3s ease;
-    animation: slideInDown 0.5s ease-out;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: slideInDown 0.6s ease-out;
+}
+
+.pwa-install-btn i {
+    color: var(--primary-cool);
+    font-size: 1.1rem;
 }
 
 .pwa-install-btn:hover {
-    background: rgba(33, 150, 243, 0.7); /* لون أزرق شفاف عند الحوم */
-    border-color: #2196f3;
+    transform: scale(1.05); /* تأثير تكبير بسيط عند الحوم */
+    background: var(--primary-cool);
+    color: #fff;
 }
 
-/* أنيميشن لظهور الزر من الأعلى */
+.pwa-install-btn:hover i {
+    color: #fff;
+}
+
+/* تعديل الأنيميشن ليكون أكثر نعومة */
 @keyframes slideInDown {
     from {
-        transform: translateY(-100%) translateX(-50%);
+        top: -100px;
         opacity: 0;
     }
     to {
-        transform: translateY(0) translateX(-50%);
+        top: 20px;
         opacity: 1;
     }
-} 
+}
+
+/* إخفاء الزر على الشاشات الصغيرة جداً إذا كان يغطي مساحة كبيرة */
+@media (max-width: 400px) {
+    .pwa-install-btn {
+        font-size: 0.85rem;
+        padding: 10px 15px;
+    }
+}
