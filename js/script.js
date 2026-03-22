@@ -242,10 +242,10 @@ const installBtn = document.getElementById('installBtn');
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    // إظهار الزر في الأعلى
-    if (installDiv) installDiv.style.display = 'block';
+    // إظهار الحاوية فقط عندما يكون التثبيت متاحاً
+    const installDiv = document.getElementById('installApp');
+    if (installDiv) installDiv.style.display = 'flex'; 
 });
-
 if (installBtn) {
     installBtn.addEventListener('click', async () => {
         if (deferredPrompt) {
